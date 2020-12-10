@@ -1,0 +1,56 @@
+<!--부트스트랩 cdn-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<html>
+        <!--##########################################################################################----->
+        <!--##########################################################################################----->
+        <!--##########################################################################################----->           
+        <h3>Shorten your link with Jitly</h3>
+        <form id="url_form" method="POST" action='/'>
+            {% csrf_token %}
+            <!--보안관련 설정-->
+            <input type="text" id="input_box" name="input_url" class="form-control" placeholder="Text input" />
+            <input type="submit" id="submit_button" class="btn btn-primary" value="create"/>
+            <input type="hidden" id="hidden_box" name="hidden_box" value="empty"/>
+        </form> 
+        <hr/>
+    
+        {% if a %}
+            <!-- 전송해서 처리된 결과가 있을 경우-->
+            <script>
+                // shorten된 결과를 input box에 출력하는 과정
+                var x="{{a}}";
+                var result=document.getElementById('input_box');
+                result.value='/'+x;
+    
+                var copy=document.getElementById('submit_button');
+                copy.value="copy";
+    
+                var hidden=document.getElementById('hidden_box');
+                hidden.value="filled";
+    
+    
+                // create 버튼이 submit 기능을 하지 못하게 하는 과정
+                copy.setAttribute("type","button");
+                
+                copy.onclick=function(){
+                    // 클립보드에 복사하는 과정
+                    alert('복사하자');
+                    var data=x;
+                    var obj = document.getElementById('input_box');
+                    obj.select(); //인풋 컨트롤의 내용 전체 선택
+                    document.execCommand("copy"); //복사
+                    obj.setSelectionRange(0, 0); //선택영역 초기화
+    
+                    // copy.onclick=null; <-이벤트를 제거
+                }
+         
+    
+            </script>
+            
+            {%endif%}
+            <!--##########################################################################################----->
+            <!--##########################################################################################----->
+            <!--##########################################################################################----->
+</html>
