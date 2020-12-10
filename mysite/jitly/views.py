@@ -16,6 +16,8 @@ def main(request):
         input_url=request.POST.get("input_url")
         hidden=request.POST.get("hidden_box")
 
+        if hidden=='wrong url':
+            return render(request,'main.html')
         
         # original url이 기존에 있었는지 확인
         link=Link.objects.filter(original=input_url)
