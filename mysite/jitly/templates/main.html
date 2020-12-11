@@ -32,8 +32,9 @@
   <!-- Navigation -->
   <nav class="navbar navbar-light bg-light static-top">
     <div class="container">
-      <a class="navbar-brand" href="#">Start Bootstrap</a>
-      <a class="btn btn-primary" href="#">Sign In</a>
+      <a class="navbar-brand" href="#">Jitly</a>
+      <a class="btn btn-primary"  href="/">Try again</a>
+      
     </div>
   </nav>
   <!----##################### 주요처리부분 ############################################################-->
@@ -61,24 +62,21 @@
                 <input type="hidden" id="hidden_box" name="hidden_box" value="empty"/>
                   </div>
                   <div class="form-row"></div>
-              <div  class="col-12 col-md-12">
-                    <button type="hidden" id="try_agian" class="btn btn-block btn-lg btn-primary" >Try again!</button>
-              </div>
+              
           </form>
-
+          
           {% if a %}
             <!-- 전송해서 처리된 결과가 있을 경우-->
             <script>
                 // shorten된 결과를 input box에 출력하는 과정
                 var x="{{a}}";
                 var result=document.getElementById('input_box');
-                result.value='/'+x;
+                result.value=x;
     
                 var copy=document.getElementById('submit_button');
                 copy.innerHTML="Copy!"
                 copy.setAttribute("class","btn btn-block btn-lg btn-success")
     
-                
                 // create 버튼이 submit 기능을 하지 못하게 하는 과정
                 copy.setAttribute("type","button");
                 
@@ -100,6 +98,7 @@
             <script>
                 var result=document.getElementById('input_box');
                 var submit=document.getElementById('submit_button');
+               
                 submit.onclick=function(){
                     var re = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/;
                     if (!re.test(result.value)) { 

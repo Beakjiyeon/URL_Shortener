@@ -27,7 +27,8 @@ def main(request):
             result=Link.objects.get(original=input_url).shorts
             print('있습니당')
             print("뭐냐",Link.objects.filter(original=input_url))
-            return render(request, 'main.html',{'a':result})
+            print("뭐냐2",result)
+            return render(request, 'main.html',{'a':'http://127.0.0.1:8000/'+result})
 
         else :
             # 없으면 새로 만들어야 함
@@ -56,7 +57,7 @@ def main(request):
             )
             # DB에 반영
             link.save()
-            return render(request, 'main.html',{'a':result})
+            return render(request, 'main.html',{'a':'http://127.0.0.1:8000/'+result})
         
     # GET 통신인 경우
     else :
