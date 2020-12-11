@@ -1,45 +1,37 @@
 {% load static %}
+<!-- 부트스트랩 관련 Static 파일 로드-->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Landing Page - Start Bootstrap Theme</title>
+  <title>URL Shortener : jitly</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <!-- Bootstrap core CSS -->
   <link href="{% static 'jitly/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
-
   <!-- Custom fonts for this template -->
   <link href="{% static 'jitly/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
   <link href="{% static 'jitly/vendor/simple-line-icons/css/simple-line-icons.css' %}" rel="stylesheet" type="text/css">
   <link href="{% static 'jitly/https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic'%}" rel="stylesheet" type="text/css">
-
   <!-- Custom styles for this template -->
   <link href="{% static 'jitly/css/landing-page.min.css'%}" rel="stylesheet">
-
 </head>
 
 <body>
-
   <!-- Navigation -->
   <nav class="navbar navbar-light bg-light static-top">
     <div class="container">
       <a class="navbar-brand" href="#">Jitly</a>
       <a class="btn btn-primary"  href="/">Try again</a>
-      
     </div>
   </nav>
-  <!----##################### 주요처리부분 ############################################################-->
-  <!----############################################################################################-->
-  <!----############################################################################################-->
+  
   <!-- Masthead -->
   <header class="masthead text-white text-center">
     <div class="overlay"></div>
@@ -49,71 +41,68 @@
           <h1 class="mb-5">Jitly makes your life easy!</h1>
         </div>
         <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-               
+
+          <!----##################### 주요처리부분입니다. ##########################-->
+          <!-- URL 입력 폼 생성 -->
           <form id="url_form" method="POST" action='/'>
             <div class="form-row">
               <div class="col-12 col-md-9 mb-2 mb-md-0">
-                    {% csrf_token %}
-                    <!--보안관련 설정-->
+                <!-- 보안관련 설정 -->
+                {% csrf_token %}
+                <!-- URL 입력 및 결과 확인 Input Box -->
                 <input type="text" id="input_box" name="input_url" class="form-control form-control-lg" placeholder="Submit URL you wan to shorten...">
               </div>
               <div class="col-12 col-md-3">
+                <!-- 제출 및 복사 용도 버튼 -->
                 <button type="submit" id="submit_button" class="btn btn-block btn-lg btn-primary" >Create!</button>
+                <!-- URL 검증 시 views.py 에 전달하기 위한 용도 hidden-->
                 <input type="hidden" id="hidden_box" name="hidden_box" value="empty"/>
-                  </div>
-                  <div class="form-row"></div>
-              
+              </div>
           </form>
-          
-          {% if a %}
-            <!-- 전송해서 처리된 결과가 있을 경우-->
+
+          <!-- 서버에서 전달된 결과 값이 있을 경우 -->
+          {% if result %}
             <script>
-                // shorten된 결과를 input box에 출력하는 과정
-                var x="{{a}}";
+                // Short URL을 input box에 출력
                 var result=document.getElementById('input_box');
-                result.value=x;
-    
+                result.value="{{result}}"
+                
+                // Submit 버튼을 Copy 용도로 변환
                 var copy=document.getElementById('submit_button');
                 copy.innerHTML="Copy!"
                 copy.setAttribute("class","btn btn-block btn-lg btn-success")
-    
-                // create 버튼이 submit 기능을 하지 못하게 하는 과정
+                // Submit 되지 않게 button 타입으로 수정
                 copy.setAttribute("type","button");
-                
+                // 클립보드 복사 이벤트
                 copy.onclick=function(){
-                    // 클립보드에 복사하는 과정
-                    alert('해당 URL을 복사 합니다. . .');
-                    var data=x;
+                    alert('해당 URL : {{result}} 를 복사 합니다. . .');
+                    // var data=x;
                     var obj = document.getElementById('input_box');
-                    obj.select(); //인풋 컨트롤의 내용 전체 선택
-                    document.execCommand("copy"); //복사
-                    obj.setSelectionRange(0, 0); //선택영역 초기화
-    
-                    // copy.onclick=null; <-이벤트를 제거
+                    obj.select(); // input 내용 전체 선택
+                    document.execCommand("copy"); // 복사
+                    obj.setSelectionRange(0, 0); // 선택영역 초기화
                 }
-         
-    
             </script>
+            <!-- 서버에서 전달된 결과 값이 없을 경우 : GET으로 얻은 프론트 페이지일 경우 -->
             {%else%}
             <script>
                 var result=document.getElementById('input_box');
                 var submit=document.getElementById('submit_button');
-               
+                // URL 유효성 검사
                 submit.onclick=function(){
                     var re = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/;
+                    // 유효하지 않을 경우
                     if (!re.test(result.value)) { 
-                        alert("유효하지 않은 URL 입니다. . .");
-                        return false;
+                        // 서버에게도 URL이 틀렸다고 알려줌.
                         var hidden=document.getElementById('hidden_box');
                         hidden.value="wrong_url";
+                        alert("유효하지 않은 URL 입니다. . .");
+                        return false;
                     }
                 }
-               
             </script>
             {%endif%}
-  <!----##################### 주요처리부분 END ############################################################-->
-  <!----############################################################################################-->
-  <!----############################################################################################-->
+            <!----##################### 주요처리 부분 END 입니다. ##########################-->
         </div>
       </div>
     </div>
