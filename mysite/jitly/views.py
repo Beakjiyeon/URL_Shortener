@@ -21,10 +21,14 @@ def main(request):
         # 자바스크립트에서 유효한 URL인지 검증한 결과 값
         hidden=request.POST.get("hidden_box")
 
+        # DB에 있는 전체 Link 리스트를 출력
+        links=Link.objects.all()
+        print('가져오자고요...',links)
+
         # 2. 검사
         # URL이 유효하지 않다면, HTML 페이지로 이동
         if hidden=='wrong url':
-            return render(request,'main.html')
+            return render(request,'main.html',{'links':links})
 
         # 3. 입력된 URL이 기존 DB에 있는 지 확인
         link=Link.objects.filter(original=input_url)
@@ -32,8 +36,9 @@ def main(request):
         if link:
             # 해당하는 DB를 불러옴
             result=Link.objects.get(original=input_url).shorts
+            
             # localhost 사용
-            return render(request, 'main.html',{'result':'http://127.0.0.1:8000/'+result})
+            return render(request, 'main.html',{'result':'http://127.0.0.1:8000/'+result,'links':links})
 
         # 4. 없으면 Short URL 새로 만들어야 함
         else :
@@ -62,12 +67,14 @@ def main(request):
             )
             link.save()
             # localhost 사용
-            return render(request, 'main.html',{'result':'http://127.0.0.1:8000/'+result})
-        
+            # DB에 있는 전체 Link 리스트를 출력
+            
+            return render(request, 'main.html',{'result':'http://127.0.0.1:8000/'+result,'links':links})
     # GET 통신인 경우
     else :
-        # 프론트만 출력
-        return render(request, 'main.html')
+        # DB에 있는 전체 Link 리스트를 출력
+        links=Link.objects.all()
+        return render(request, 'main.html',{'links':links})
 
 # Short를 Original로 리다이렉션 하는 함수
 def show(request,short):

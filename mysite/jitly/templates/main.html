@@ -34,8 +34,11 @@
   
   <!-- Masthead -->
   <header class="masthead text-white text-center">
-    <div class="overlay"></div>
+    <div class="overlay">
+    </div>
+
     <div class="container">
+      
       <div class="row">
         <div class="col-xl-9 mx-auto">
           <h1 class="mb-5">Jitly makes your life easy!</h1>
@@ -59,8 +62,30 @@
                 <input type="hidden" id="hidden_box" name="hidden_box" value="empty"/>
               </div>
           </form>
+          <br/>
+          <div style="width:650px">
+          
+            <table class="table table-hover" style="width:650px">
+              <tr>
+                <th>Shorten URL List</th>
+                <th>Copy</th>
+              </tr>
+              {% if links %} 
+              {% for link in links %} 
+                <tr>
+                  <td>{{link.shorts}}</td>
+                <td><a href="/{{link.shorts}}">Go!</button></td>
+                </tr>
+              {% endfor %}
+              {% else %}
+                <tr>
+                  <td>흑</td>
+                </tr>
+              {% endif %}
+            </table>
+          </div>
 
-          <!-- 서버에서 전달된 결과 값이 있을 경우 -->
+          <!-- 1. 서버에서 전달된 결과 값이 있을 경우 -->
           {% if result %}
             <script>
                 // Short URL을 input box에 출력
@@ -83,8 +108,9 @@
                     obj.setSelectionRange(0, 0); // 선택영역 초기화
                 }
             </script>
-            <!-- 서버에서 전달된 결과 값이 없을 경우 : GET으로 얻은 프론트 페이지일 경우 -->
+            <!-- 2. 서버에서 전달된 결과 값이 없을 경우 : GET으로 얻은 프론트 페이지일 경우 -->
             {%else%}
+                
             <script>
                 var result=document.getElementById('input_box');
                 var submit=document.getElementById('submit_button');
@@ -103,9 +129,15 @@
             </script>
             {%endif%}
             <!----##################### 주요처리 부분 END 입니다. ##########################-->
+            
+    
+
+  </div>
         </div>
+      
+        
       </div>
-    </div>
+
   </header>
 
   <!-- Icons Grid -->
